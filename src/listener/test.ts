@@ -1,8 +1,11 @@
-    const minDelayTime = 9000
-    const maxDelayTime = 20000
-    const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime)) + minDelayTime
-    //const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime))
+var obj = {
+    "name": "LiLi",
+    "age": 22,
+    "sex": "F"
+};
 
-    const de = Math.floor(delayTime/1000);
+var str = JSON.stringify(obj);
+console.log(str);
 
-    console.log(de*1000);
+var obj2 = JSON.parse(str);
+console.log(obj2);  
