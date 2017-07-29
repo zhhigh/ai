@@ -388,7 +388,7 @@ let getGirlPicPath = async function(message:Message,filePath:string):Promise<str
     });
 
     console.log(`"filename is : "${fileName}`);
-    return `"/bot/meizitu/"${fileName}`;
+    return fileName;
 
 };
 
