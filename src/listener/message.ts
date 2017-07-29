@@ -3,7 +3,8 @@ import {WelComeMsg,addFansWord} from "./config";
 var memberList:string[] = [];
 const fs = require('fs');
 //const g_Path = require('path');
-const IMAGE_PATH  = '/bot/meizitu/';
+const IMAGE_PATH   = '/bot/meizitu/';
+const IMAGE_QRCODE = '/bot/qr/';
 const HOUR_OFFSET = 8 ;
 
 exports = module.exports = async function onMessage (message) {
@@ -12,9 +13,21 @@ exports = module.exports = async function onMessage (message) {
     switch (isWorkTime){
         case 'Y'://work time
             //await replyMsg(message);
-            console.log('none work time');
+            //await addFansFromGroupV2(message);
+            setTimeout(() => {
+                console.log('delay-----');
+                replyMsg(message);
+            }, 9000);
+
+
+
+            console.log('it is work time');
             break;
         case 'N':
+            setTimeout(() => {
+                console.log('delay-----');
+                replyMsgNoneWorkTime(message);
+            }, 9000);
             console.log('current time is not work time!');
             break;
         default:
@@ -29,12 +42,18 @@ exports = module.exports = async function onMessage (message) {
 let getWorkTime   = function():string{
     let dateObj = new Date();
     let hour = dateObj.getHours() +  HOUR_OFFSET ;
-    var isWorkTime = '';
+    //console.log(hour);
+    //var isWorkTime = '';
     // 0-7 none work time
     if (hour >= 7){
-        isWorkTime = 'Y';
+        //console.log('>=7');
+        //isWorkTime = 'Y';
+        return 'Y';
+    }else{
+        //console.log('<7');
+        return 'N';
     };
-    return 'N';
+
 };
 
 let getTimeLimit = function():number{
@@ -55,9 +74,15 @@ let addFansFromGroupV2 = async function(message:Message):Promise<any>{
     if (from && from.stranger()){//没有加过好友
         if(memberList.indexOf(name) === -1){//未执行过发送加好友请求的操作
             const request = new FriendRequest();
-            request.send(from,addFansWord);
+            let result = await request.send(from,addFansWord);
+            console.log(`"result is :"${result}`);
+            if (result){
+                console.log(`Request from ${name} is send succesfully!`)
+            }else{
+                console.log(`Request from ${name} failed to send!`)
+            };
             console.log("---------request--------");
-            console.log(request);
+            //console.log(request);
             memberList.push(name);
         }else{
             console.log(`${name}"-----已经发送过请求了"`);
@@ -124,18 +149,49 @@ let addFansFromGroup = async function(message:Message):Promise<any>{
     return;
 };
 
+let replyMsgNoneWorkTime = async function(message:Message):Promise<any>{
+    const room      = message.room();
+    const sender    = message.from();
+    const content   = message.content();
+    const topic = room ? '[' + room.topic() + ']' : '';
+    const name      = sender.name();
+    console.log(`${topic} <${sender.name()}> : ${message.toStringDigest()}`);
+
+    if (room){
+        if ( /免费发放微信群二维码/.test(message.room().topic())&& !message.self()) {
+
+            await message.say(`@${name}  "累了！"`);
+            return;
+        }
+        return;
+    }
+
+    if (message.self() || room) {
+        console.log('message is sent from myself, or inside a room.');
+        return;
+    }else{
+        await message.say(`@${name}  "累了！"`);
+        return;
+    };
+};
+
+
 let replyMsg = async function(message:Message):Promise<any>{
     const room      = message.room();
     const sender    = message.from();
     const content   = message.content();
     const topic = room ? '[' + room.topic() + ']' : '';
-    console.log(`${topic} <${sender.name()}> : ${message.toStringDigest()}`);
+    //console.log(`${topic} <${sender.name()}> : ${message.toStringDigest()}`);
 
     if (room){
         if ( /免费发放微信群二维码/.test(message.room().topic())&& !message.self()) {
             switch(content){
                 case '1':
-                    await message.say('公众号取，微信个人号、微信群正在开发中......');
+                    //await message.say('公众号取，微信个人号、微信群正在开发中......');
+                    await getGirlPicPath(message,IMAGE_QRCODE);
+                    break;
+                case '二维码':
+                    await getGirlPicPath(message,IMAGE_QRCODE);
                     break;
                 case '2':
                     await message.say('私信沟通！');
@@ -158,6 +214,9 @@ let replyMsg = async function(message:Message):Promise<any>{
                     //replyPic(message,tempPath2);
                     await getGirlPicPath(message,IMAGE_PATH);
                     break;
+                case '妹子':
+                    await getGirlPicPath(message,IMAGE_PATH);
+                    break;
                 default:
                     await message.say(WelComeMsg);
             };
@@ -171,7 +230,10 @@ let replyMsg = async function(message:Message):Promise<any>{
 
     switch(content){
         case '1':
-            await message.say('公众号取，微信个人号、微信群正在开发中......');
+            await getGirlPicPath(message,IMAGE_QRCODE);
+            break;
+        case '二维码':
+            await getGirlPicPath(message,IMAGE_QRCODE);
             break;
         case '2':
             await message.say('私信沟通！');
@@ -182,6 +244,21 @@ let replyMsg = async function(message:Message):Promise<any>{
         case '4':
             await message.say('私信沟通！');
             break;
+        case 'girl':
+            //let tempPath1 = getPicPathV1(IMAGE_PATH);
+            //console.log('=====================');
+            //console.log(tempPath1);
+            //replyPic(message,tempPath1);
+            await getGirlPicPath(message,IMAGE_PATH);
+            break;
+        case '美女':
+            //let tempPath2 = getPicPathV1(IMAGE_PATH);
+            //replyPic(message,tempPath2);
+            await getGirlPicPath(message,IMAGE_PATH);
+            break;
+        case '妹子':
+            await getGirlPicPath(message,IMAGE_PATH);
+            break;
         default:
             await message.say(WelComeMsg);
     };
@@ -191,10 +268,13 @@ let replyMsg = async function(message:Message):Promise<any>{
 
 
 let delayTime = async function():Promise<any>{
-    const minDelayTime = 5000
-    const maxDelayTime = 10000
-    const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime)) + minDelayTime
-    return delayTime
+    const minDelayTime = 9000;
+    const maxDelayTime = 15000;
+    const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime)) + minDelayTime;
+    const result    = Math.floor(delayTime/1000);
+    const re        = result * 1000;
+    console.log(`"delaytime is :"${re}`);
+    return re;
 };
 
 
@@ -296,7 +376,7 @@ let getGirlPicPath = async function(message:Message,filePath:string):Promise<str
         };
 
         fileName = files[random];
-        fileName = "/bot/meizitu/" + fileName;
+        fileName = filePath + fileName;
         console.log(`"filename is : "${fileName}`);
         replyPic(message,fileName);
         return fileName;
