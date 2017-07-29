@@ -1,18 +1,8 @@
-var d = new Date();
-//var gmtHours = d.getTimezoneOffset()/60;
-//console.log(gmtHours);
+    const minDelayTime = 9000
+    const maxDelayTime = 20000
+    const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime)) + minDelayTime
+    //const delayTime = Math.floor(Math.random() * (maxDelayTime - minDelayTime))
 
+    const de = Math.floor(delayTime/1000);
 
-let hour = d.getHours();
-
-switch (hour){
-    case 8,9,12,13:
-        console.log(hour);
-        break;
-    case 0,1,2:
-        break;
-    default:
-        break;
-
-};
-//console.log(hour);
+    console.log(de*1000);
