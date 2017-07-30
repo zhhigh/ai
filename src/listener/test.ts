@@ -1,11 +1,12 @@
-var obj = {
-    "name": "LiLi",
-    "age": 22,
-    "sex": "F"
-};
+const randomList:number[] = [6000,7000,8000,9000,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000];
+const length              = randomList.length;
+console.log(length);
 
-var str = JSON.stringify(obj);
-console.log(str);
+randomList.forEach(function(name){
+    //name就是arr数组中对应的元素
+    console.log(name);
+});
 
-var obj2 = JSON.parse(str);
-console.log(obj2);  
+const random = Math.random() *( length - 1 ) + 1;
+const re     = Math.round(random);
+console.log(re);
