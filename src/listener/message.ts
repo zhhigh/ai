@@ -1,5 +1,6 @@
 import {Room, Contact, Message, MsgType,FriendRequest,MediaMessage} from "wechaty";
 import {WelComeMsg,addFansWord} from "./config";
+import {Util} from "./util";
 var memberList:string[] = [];
 const fs = require('fs');
 //const g_Path = require('path');
@@ -10,6 +11,8 @@ var   SEND_NUMBER = 0 ;
 exports = module.exports = async function onMessage (message) {
 
     let isWorkTime:string = getWorkTime();
+    let randomNumber      = Util.getRandomFromArray();
+    console.log(`"current random number is:"${randomNumber}`);
     switch (isWorkTime){
         case 'Y'://work time
             //await replyMsg(message);
@@ -18,7 +21,7 @@ exports = module.exports = async function onMessage (message) {
                 console.log('delay-----');
                 replyMsg(message);
                 addFansFromGroupV2(message);
-            }, 9000);
+            }, randomNumber);
 
 
 
