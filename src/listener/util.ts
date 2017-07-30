@@ -6,7 +6,7 @@ export class Util{
         let length              = randomList.length;
         let random      = Math.random() *( length - 1 ) + 1;
         let temp        = Math.round(random);
-        return randomList[temp];
+        return randomList[temp-1];
     };
 
 };
