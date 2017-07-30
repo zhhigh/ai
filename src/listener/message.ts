@@ -72,7 +72,9 @@ let addFansFromGroupV2 = async function(message:Message):Promise<any>{
     console.log(memberList);
     const from:Contact = message.from();
     const name = from.name();
+    console.log(`"now was sended:"${SEND_NUMBER}`);
     if (SEND_NUMBER >= 80){
+        console.log('the send number was finished today');
         return;
     };
 
@@ -85,6 +87,7 @@ let addFansFromGroupV2 = async function(message:Message):Promise<any>{
                 SEND_NUMBER = SEND_NUMBER + 1;
                 console.log(`Request from ${name} is send succesfully!`)
             }else{
+                SEND_NUMBER = SEND_NUMBER + 1;
                 console.log(`Request from ${name} failed to send!`)
             };
             console.log("---------request--------");
@@ -109,7 +112,7 @@ let addFansFromGroupV1 = async function(message:Message):Promise<any>{
             console.log(request.send(from,addFansWord));
             //console.log(q);
             console.log(addFansWord);
-            }, delayTime());
+        }, delayTime());
         //console.log(time);
 
     };
@@ -227,7 +230,7 @@ let replyMsg = async function(message:Message):Promise<any>{
                     await message.say(WelComeMsg);
             };
         }
-       return;
+        return;
     }
     if (message.self() || room) {
         console.log('message is sent from myself, or inside a room.');
@@ -387,10 +390,10 @@ let getGirlPicPath = async function(message:Message,filePath:string):Promise<str
         replyPic(message,fileName);
         return fileName;
         /*files.forEach(function(file){
-            const length = files.length;
-            console.log(`"meizitu files count:  "${length}`);
-            //console.info(file);
-        });*/
+         const length = files.length;
+         console.log(`"meizitu files count:  "${length}`);
+         //console.info(file);
+         });*/
     });
 
     console.log(`"filename is : "${fileName}`);
