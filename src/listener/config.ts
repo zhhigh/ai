@@ -5,14 +5,16 @@
                         完成工作时间非工作时间限制
      V0.005 2017-07-30  完成自动加人，可能还有bug
 
+
       BUG-2              群，还是发送请求加人信息
       BUG-1              对方是机器人，频繁相互发送
+
 
       proress            私密码自动加群
                          踢人
                          加人
                          次数限制
-
+                         *****随机时间，从数组里面抽一个
 
 
  http://www.w3school.com.cn/jsref/jsref_getTimezoneOffset.asp
