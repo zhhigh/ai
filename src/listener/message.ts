@@ -20,7 +20,7 @@ exports = module.exports = async function onMessage (message) {
             setTimeout(() => {
                 console.log('delay-----');
                 replyMsg(message);
-                addFansFromGroupV2(message);
+                //addFansFromGroupV2(message);
             }, randomNumber);
 
 
