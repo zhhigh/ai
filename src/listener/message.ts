@@ -6,7 +6,7 @@ const fs = require('fs');
 const IMAGE_PATH   = '/bot/meizitu/';
 const IMAGE_QRCODE = '/bot/qr/';
 const HOUR_OFFSET = 8 ;
-
+var   SEND_NUMBER = 0 ;
 exports = module.exports = async function onMessage (message) {
 
     let isWorkTime:string = getWorkTime();
@@ -72,12 +72,17 @@ let addFansFromGroupV2 = async function(message:Message):Promise<any>{
     console.log(memberList);
     const from:Contact = message.from();
     const name = from.name();
+    if (SEND_NUMBER >= 80){
+        return;
+    };
+
     if (from && from.stranger()){//没有加过好友
         if(memberList.indexOf(name) === -1){//未执行过发送加好友请求的操作
             const request = new FriendRequest();
             let result = await request.send(from,addFansWord);
             console.log(`"result is :"${result}`);
             if (result){
+                SEND_NUMBER = SEND_NUMBER + 1;
                 console.log(`Request from ${name} is send succesfully!`)
             }else{
                 console.log(`Request from ${name} failed to send!`)
