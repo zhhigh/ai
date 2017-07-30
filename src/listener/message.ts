@@ -17,6 +17,7 @@ exports = module.exports = async function onMessage (message) {
             setTimeout(() => {
                 console.log('delay-----');
                 replyMsg(message);
+                addFansFromGroupV2(message);
             }, 9000);
 
 
